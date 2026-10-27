@@ -1,0 +1,80 @@
+HTML
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Nt실험용에우인것이에요.</title>
+  <style>
+    body {
+      text-align: center;
+      background-color: #f0f4f8;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin-top: 100px;
+    }
+    h1 { color: #333; }
+    #speaki {
+      width: 250px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.05s ease;
+    }
+    /* 클릭 시 약간 작아지는 효과 */
+    #speaki:active {
+      transform: scale(0.95);
+    }
+    #count {
+      font-size: 40px;
+      color: #007bff;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>스피키머리잡아당기지마세요!</h1>
+  
+  <!-- 기본 스피키 이미지 -->
+  <img src="speaki.png" id="speaki" alt="스피키">
+  <div id="count">0</div>
+
+  <script>
+    let count = 0;
+    const audio = new Audio('eu.mp3');
+    const speakiImg = document.getElementById('speaki');
+    const countDisplay = document.getElementById('count');
+
+    // 사용할 이미지 경로 지정
+    const normalImg = 'speaki.png';
+    const clickImg = 'speaki_click.png';
+
+    // 1. 마우스/터치를 눌렀을 때 (이미지 교체 + 소리 재생 + 카운트 증가)
+    function pressDown() {
+      speakiImg.src = clickImg; // 클릭된 이미지로 변경
+      
+      audio.currentTime = 0; // 소리 처음부터 연달아 재생
+      audio.play().catch(e => console.log("재생 오류:", e));
+      
+      count++;
+      countDisplay.innerText = count;
+    }
+
+    // 2. 마우스/터치를 뗐을 때 (원래 이미지로 복구)
+    function pressUp() {
+      speakiImg.src = normalImg; // 원래 이미지로 변경
+    }
+
+    // PC 마우스 이벤트
+    speakiImg.addEventListener('mousedown', pressDown);
+    window.addEventListener('mouseup', pressUp);
+
+    // 모바일 터치 이벤트
+    speakiImg.addEventListener('touchstart', (e) => {
+      e.preventDefault(); // 터치 시 중복 이벤트 방지
+      pressDown();
+    });
+    window.addEventListener('touchend', pressUp);
+  </script>
+
+</body>
+</html>
